@@ -10,6 +10,10 @@ class Actor::Mother < Actor::Base
 
   def logic
     nearest_enemy = Scaner.new(self).foe.nearest.first
-    attack nearest_enemy if nearest_enemy
+    if nearest_enemy
+      attack nearest_enemy
+    else
+      move_to Waypoint.new(rand(500), rand(500))
+    end
   end
 end

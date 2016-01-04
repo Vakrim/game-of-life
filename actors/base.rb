@@ -8,13 +8,13 @@ class Actor::Base
   end
 
   def initialize(options = {})
-    @@actors << self
+    @@actors.push(self).shuffle!
     @is_alive = true
     @x = options[:x] || 0
     @y = options[:y] || 0
     @hp = options[:hp] || max_hp
     @hp_text = Gosu::Font.new(12)
-    @game_ticks = 0
+    @timer = Timer.new
   end
 
   def max_hp
@@ -31,11 +31,9 @@ class Actor::Base
   end
 
   def update(tick)
-    @game_ticks += tick
-    logic if (@game_ticks % 15).zero?
-    @target = nil if @target && !@target.alive?
-    action_done = false
-    if respond_to?(:attack_update) && attack_update(tick)
+    logic if @timer.since_last?(:logic, 1.0)
+    @target = nil if @target && !@target.exists?
+    if respond_to?(:attack_update) && :attack == @task && attack_update(tick)
     elsif respond_to?(:move_update) && move_update(tick)
     end
   end
@@ -46,11 +44,15 @@ class Actor::Base
     color = Gosu::Color::WHITE
     color = team.color if respond_to? :team
     Gosu::draw_rect(x - 5, y - 5, 10, 10, color)
-    @hp_text.draw_rel("#{hp} / #{max_hp}", x, y + 10, 1, 0.5, 0) if hp < max_hp
+    @hp_text.draw_rel(sprintf("%i / %i", hp, max_hp), x, y + 10, 1, 0.5, 0) if hp < max_hp
   end
 
   def alive?
     @is_alive
+  end
+
+  def exists?
+    alive?
   end
 
   def destroy!

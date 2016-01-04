@@ -3,10 +3,11 @@ module Attackable
 
   def attack(target)
     @target = target
+    @task = :attack
   end
 
   def attack_range
-    30
+    10
   end
 
   def target_in_range?
@@ -15,11 +16,15 @@ module Attackable
   end
 
   def attack_type
-    { melee: 2.0 }
+    { melee: 10 }
+  end
+
+  def attack_cooldown
+    1.0
   end
 
   def attack_update(tick)
-    if target_in_range?
+    if target_in_range? && @timer.since_last?(:attack, attack_cooldown)
       target.apply_damage! attack_type
       true
     else

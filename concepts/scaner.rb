@@ -1,6 +1,6 @@
 class Scaner
   extend Forwardable
-  def_delegator :@selected, :[], :first, :last, :any?
+  def_delegators :@selected, :[], :first, :last, :any?
 
   def initialize(actor)
     @actor = actor

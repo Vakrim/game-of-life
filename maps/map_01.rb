@@ -1,6 +1,10 @@
-a = Actor::Mother.new({ x: 30, y: 30 })
 
-b = Actor::Mother.new({ x: 130, y: 130 })
+t1 = Team.new
+10.times do |n|
+  a = Actor::Mother.new({ x: rand(400), y: rand(400), team: t1 })
+end
 
-a.attack(b)
-b.attack(a)
+t2 = Team.new
+10.times do |n|
+  a = Actor::Mother.new({ x: rand(400), y: rand(400), team: t2 })
+end

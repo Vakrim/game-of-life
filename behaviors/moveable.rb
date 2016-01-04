@@ -3,10 +3,11 @@ module Moveable
 
   def move_to(target)
     @target = target
+    @task = :move_to
   end
 
   def speed
-    20.0
+    40.0
   end
 
   def is_at_target?
