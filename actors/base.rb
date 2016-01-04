@@ -20,10 +20,6 @@ class Actor::Base
     30
   end
 
-  def define_logic(&block)
-    yield ActorLogic.new(self)
-  end
-
   def restore_hp!
     self.hp = max_hp
   end
@@ -37,7 +33,7 @@ class Actor::Base
     @target = nil if @target && !@target.alive?
     action_done = false
     if respond_to?(:attack_update) && attack_update(tick)
-    elsif respond_to? :move_update && move_update(tick)
+    elsif respond_to?(:move_update) && move_update(tick)
     end
   end
 
