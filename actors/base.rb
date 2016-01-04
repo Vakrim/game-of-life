@@ -4,7 +4,7 @@ class Actor::Base
   attr_reader :x, :y, :hp
 
   def self.all_actors
-    @@actors
+    @@actors.dup
   end
 
   def initialize(options = {})
@@ -14,6 +14,7 @@ class Actor::Base
     @y = options[:y] || 0
     @hp = options[:hp] || max_hp
     @hp_text = Gosu::Font.new(12)
+    @game_ticks = 0
   end
 
   def max_hp
@@ -30,12 +31,16 @@ class Actor::Base
   end
 
   def update(tick)
+    @game_ticks += tick
+    logic if (@game_ticks % 15).zero?
     @target = nil if @target && !@target.alive?
     action_done = false
     if respond_to?(:attack_update) && attack_update(tick)
     elsif respond_to?(:move_update) && move_update(tick)
     end
   end
+
+  def logic; end
 
   def draw
     color = Gosu::Color::WHITE
