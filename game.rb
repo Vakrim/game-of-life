@@ -14,6 +14,7 @@ class GameWindow < Gosu::Window
     tick = 1.0/60
     Timer.step(tick)
     Actor::Base.all_actors.each { |a| a.update tick }
+    Actor::Base.fix_overlaping!
   end
 
   def draw
