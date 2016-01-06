@@ -1,10 +1,7 @@
 
-t1 = Team.new
-10.times do |n|
-  a = Actor::Mother.new({ x: rand(400), y: rand(400), team: t1 })
-end
-
-t2 = Team.new
-10.times do |n|
-  a = Actor::Mother.new({ x: rand(400), y: rand(400), team: t2 })
+Array.new(2){ Team.new }.each do |team|
+  10.times do |n|
+    Actor::Soldier.new({ x: rand(400), y: rand(400), team: team })
+  end
+  Actor::Mother.new({ x: rand(400), y: rand(400), team: team })
 end

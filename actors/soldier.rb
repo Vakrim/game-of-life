@@ -1,18 +1,18 @@
-class Actor::Mother < Actor::Base
+class Actor::Soldier < Actor::Base
   include Teamable
   include Moveable
   include Attackable
 
   def movement_speed
-    20.0
+    120.0
   end
 
   def max_hp
-    100.0
+    10.0
   end
 
   def size
-    15.0
+    10.0
   end
 
   def logic

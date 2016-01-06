@@ -6,7 +6,7 @@ module Moveable
     @task = :move_to
   end
 
-  def speed
+  def movement_speed
     40.0
   end
 
@@ -17,11 +17,11 @@ module Moveable
   def move_update(tick)
     return unless @target
     distance_to_target = Gosu.distance(@target.x, @target.y, x, y)
-    if distance_to_target <= tick * speed
+    if distance_to_target <= tick * movement_speed
       @is_at_target = true
     else
-      @x += (@target.x - x) / distance_to_target * tick * speed
-      @y += (@target.y - y) / distance_to_target * tick * speed
+      @x += (@target.x - x) / distance_to_target * tick * movement_speed
+      @y += (@target.y - y) / distance_to_target * tick * movement_speed
       @is_at_target = false
     end
   end

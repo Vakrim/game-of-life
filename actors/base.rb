@@ -18,7 +18,7 @@ class Actor::Base
   end
 
   def max_hp
-    30
+    30.0
   end
 
   def restore_hp!
@@ -43,8 +43,12 @@ class Actor::Base
   def draw
     color = Gosu::Color::WHITE
     color = team.color if respond_to? :team
-    Gosu::draw_rect(x - 5, y - 5, 10, 10, color)
+    Gosu::draw_rect(x - size / 2, y - size / 2, size, size, color)
     @hp_text.draw_rel(sprintf("%i / %i", hp, max_hp), x, y + 10, 1, 0.5, 0) if hp < max_hp
+  end
+
+  def size
+    10.0
   end
 
   def alive?
