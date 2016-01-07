@@ -7,7 +7,7 @@ module Attackable
   end
 
   def attack_range
-    10
+    20
   end
 
   def target_in_range?

@@ -4,7 +4,7 @@ class Actor::Soldier < Actor::Base
   include Attackable
 
   def movement_speed
-    120.0
+    60.0
   end
 
   def max_hp

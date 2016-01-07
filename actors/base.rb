@@ -1,24 +1,29 @@
 class Actor::Base
   @@actors = []
 
-  attr_reader :x, :y, :hp
+  attr_accessor :x, :y
+  attr_reader :hp
 
   def self.all_actors
     @@actors.dup
   end
 
-  def self.fix_overlaping
+  def self.fix_overlaping!
     @@actors.each_with_index do |actor1, actor1_index|
+      next if !actor1.exists?
       @@actors[(actor1_index + 1)..(@@actors.size)].each_with_index do |actor2, actor2_index|
-        distance_between = Gosu.distance(actor1.x, actor1.y, actor2.x, actor2.y)
-        half_sizes_to_distance = (actor1.size + actor2.size) / 2 / distance_between
-        if half_sizes_to_distance < 1
-          mid_x = (actor1.x + actor2.x) / 2
-          mid_y = (actor1.y + actor2.y) / 2
-          actor1.x += (actor1.x - mid_x) / half_sizes_to_distance
-          actor1.y += (actor1.y - mid_y) / half_sizes_to_distance
-          actor2.x += (actor2.x - mid_x) / half_sizes_to_distance
-          actor2.y += (actor2.y - mid_y) / half_sizes_to_distance
+        next if !actor2.exists?
+        d = Gosu.distance(actor1.x, actor1.y, actor2.x, actor2.y)
+        sum_half_sizes = (actor1.size + actor2.size) / 2
+        if sum_half_sizes > d
+          old_pos1 = { x: actor1.x, y: actor1.y }
+          old_pos2 = { x: actor2.x, y: actor2.y }
+          mid_pos = { x: actor1.size / (actor1.size + actor2.size) * (old_pos2[:x] - old_pos1[:x]) + old_pos1[:x],
+                      y: actor1.size / (actor1.size + actor2.size) * (old_pos2[:y] - old_pos1[:y]) + old_pos1[:y] }
+          actor1.x = (old_pos1[:x] - old_pos2[:x]) / d * actor1.size / 2 + mid_pos[:x]
+          actor1.y = (old_pos1[:y] - old_pos2[:y]) / d * actor1.size / 2 + mid_pos[:y]
+          actor2.x = (old_pos2[:x] - old_pos1[:x]) / d * actor2.size / 2 + mid_pos[:x]
+          actor2.y = (old_pos2[:y] - old_pos1[:y]) / d * actor2.size / 2 + mid_pos[:y]
         end
       end
     end
